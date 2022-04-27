@@ -21,6 +21,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified'] ], function() {
     Route::inertia('/', 'Dashboard')->name('home');
 
     Route::get('/dropdown', [\App\Http\Controllers\ContactController::class, 'getDropdown']);
-    Route::post('/export', [\App\Http\Controllers\ContactController::class, 'export']);
+    Route::get('/export', [\App\Http\Controllers\ContactController::class, 'export']);
 });
 Route::impersonate();

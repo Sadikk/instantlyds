@@ -14,15 +14,19 @@ class ContactController extends Controller
             //TODO whitelist field
             'field' => 'required|string'
         ]);
-        DB::table('contacts')
+        $result = DB::table('contacts')
             ->select($request->input('field'))
             ->groupBy($request->input('field'))
-            ->get();
+            ->orderBy($request->input('field'))
+            ->get()
+            ->pluck($request->input('field'))
+            ->all();
+        return $this->makeResponse($request, ['options' => array_values(array_filter($result)) ]);
     }
 
     public function export(Request $request) {
         $request->validate([
-            'only_with_email' => 'boolean'
+            'only_with_email' => 'in:true,false'
         ]);
         // set header
         $columns = [
@@ -46,7 +50,7 @@ class ContactController extends Controller
             fputcsv($file, $columns);
 
             $data = Contact::select($columns);
-            if ($request->get('only_with_email', false)) {
+            if ($request->get('only_with_email', 'false') === 'true') {
                 $data = $data->whereNotNull('email');
             }
 
