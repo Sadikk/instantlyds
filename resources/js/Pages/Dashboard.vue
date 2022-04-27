@@ -9,19 +9,21 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <label>Industry</label>
-               <filter-dropdown field="industry" class="mb-2"></filter-dropdown>
+               <filter-dropdown v-model:value="filters.industry" field="industry" multiple class="mb-2"></filter-dropdown>
 
                 <label>Job title</label>
-                <filter-dropdown field="job_title" class="mb-2"></filter-dropdown>
+                <filter-dropdown field="job_title" multiple class="mb-2"></filter-dropdown>
 
                 <label>Employees</label>
-                <filter-dropdown field="job_company_size" class="mb-2"></filter-dropdown>
+                <filter-dropdown field="job_company_size" multiple class="mb-2"></filter-dropdown>
 
                 <label>Country</label>
-                <filter-dropdown field="job_company_location_country" class="mb-2"></filter-dropdown>
+                <filter-dropdown field="job_company_location_country"  multiple class="mb-2"></filter-dropdown>
 
-                <label>Only with email</label>
-                <input id="only_with_email" type="checkbox" v-model="filters.only_with_email">
+                <div class="mt-3">
+                    <input id="only_with_email" type="checkbox" v-model="filters.only_with_email"  class="form-checkbox">
+                    <span class="ml-2 cursor-pointer">Only export with email</span>
+                </div>
 
                 <div class="py-3 text-right">
                     <a :href="exportUrl" target="_blank" class="inline-flex justify-center py-2 px-4 border border-transparent
@@ -55,6 +57,7 @@
         data() {
             return {
                 filters: {
+                    industry: null,
                     only_with_email: false
                 }
             }

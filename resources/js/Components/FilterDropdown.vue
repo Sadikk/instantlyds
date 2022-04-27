@@ -40,6 +40,11 @@ export default defineComponent({
     },
     computed:{
 
+    },
+    watch: {
+        value() {
+            this.$emit('update:value', this.value);
+        }
     }
 })
 </script>
