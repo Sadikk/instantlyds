@@ -16,14 +16,34 @@ class CreateContactsTable extends Migration
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
 
-            $table->string('full_name')->nullable();
             $table->string('first_name')->nullable();
-            $table->string('middle_initial')->nullable();
-            $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('gender')->nullable();
             $table->string('linkedin_url')->nullable();
+            $table->string('facebook_url')->nullable();
+            $table->string('twitter_url')->nullable();
+            $table->string('work_email')->nullable();
+            $table->string('mobile_phone')->nullable();
+            $table->string('job_title_levels')->nullable();
+            $table->string('job_company_name')->nullable();
+            $table->string('job_company_website')->nullable();
+            $table->string('job_company_industry')->nullable();
+            $table->string('job_company_linkedin_url')->nullable();
+            $table->string('job_company_facebook_url')->nullable();
+            $table->string('job_company_twitter_url')->nullable();
+            $table->string('job_company_location_locality')->nullable();
+            $table->string('job_company_location_metro')->nullable();
+            $table->string('job_company_location_region')->nullable();
+            $table->string('job_company_location_street_address')->nullable();
+            $table->string('job_company_location_continent')->nullable();
+            $table->string('job_summary')->nullable();
+            $table->integer('linkedin_connections')->nullable();
+            $table->string('inferred_salary')->nullable();
+            $table->smallInteger('inferred_years_experience')->nullable();
+            $table->string('summary')->nullable();
+            $table->string('phone_numbers')->nullable();
             $table->string('email')->nullable();
-            //TODO add more columns
+            $table->string('email_type')->nullable();
 
             $table->string('industry')->nullable();
             $table->string('job_title')->nullable();

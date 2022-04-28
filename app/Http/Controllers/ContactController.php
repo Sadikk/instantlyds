@@ -37,18 +37,37 @@ class ContactController extends Controller
         ]);
         // set header
         $columns = [
-            'full_name',
             'first_name',
-            'middle_initial',
-            'middle_name',
             'last_name',
+            'gender',
             'linkedin_url',
-            'email',
-
+            'facebook_url',
+            'twitter_url',
+            'work_email',
+            'mobile_phone',
             'industry',
             'job_title',
+            'job_title_levels',
+            'job_company_name',
+            'job_company_website',
             'job_company_size',
-            'job_company_location_country'
+            'job_company_industry',
+            'job_company_linkedin_url',
+            'job_company_facebook_url',
+            'job_company_twitter_url',
+            'job_company_location_locality',
+            'job_company_location_metro',
+            'job_company_location_region',
+            'job_company_location_street_address',
+            'job_company_location_country',
+            'job_company_location_continent',
+            'job_summary',
+            'linkedin_connections',
+            'inferred_salary',
+            'inferred_years_experience',
+            'summary',
+            'phone_numbers',
+            'email'
         ];
 
         // create csv

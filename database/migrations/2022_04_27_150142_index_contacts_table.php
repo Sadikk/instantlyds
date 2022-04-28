@@ -18,6 +18,7 @@ class IndexContactsTable extends Migration
             $table->index(['job_title']);
             $table->index(['job_company_size']);
             $table->index(['job_company_location_country']);
+            $table->index(['email_type']);
         });
     }
 
@@ -33,6 +34,7 @@ class IndexContactsTable extends Migration
             $table->dropIndex(['job_title']);
             $table->dropIndex(['job_company_size']);
             $table->dropIndex(['job_company_location_country']);
+            $table->dropIndex(['email_type']);
         });
     }
 }
