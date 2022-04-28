@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\Actions\BuildFilterQueryAction;
+use App\Helpers\LogHelpers;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class ContactController extends Controller
@@ -26,7 +29,11 @@ class ContactController extends Controller
 
     public function export(Request $request) {
         $request->validate([
-            'only_with_email' => 'in:true,false'
+            'only_with_email' => 'in:true,false',
+            'job_title' => 'nullable',
+            'job_company_size' => 'nullable',
+            'job_company_location_country' => 'nullable',
+            'industry' => 'nullable'
         ]);
         // set header
         $columns = [
@@ -50,10 +57,8 @@ class ContactController extends Controller
             fputcsv($file, $columns);
 
             $data = Contact::select($columns);
-            if ($request->get('only_with_email', 'false') === 'true') {
-                $data = $data->whereNotNull('email');
-            }
-
+            $data = (new BuildFilterQueryAction)($data, collect($request->all()));
+            Log::info(LogHelpers::getEloquentSqlWithBindings($data));
             $data = $data->cursor()
                 ->each(function ($data) use ($file) {
                     $data = $data->toArray();

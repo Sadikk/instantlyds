@@ -12,17 +12,17 @@
                <filter-dropdown v-model:value="filters.industry" field="industry" multiple class="mb-2"></filter-dropdown>
 
                 <label>Job title</label>
-                <filter-dropdown field="job_title" multiple class="mb-2"></filter-dropdown>
+                <filter-dropdown v-model:value="filters.job_title" field="job_title" multiple class="mb-2"></filter-dropdown>
 
                 <label>Employees</label>
-                <filter-dropdown field="job_company_size" multiple class="mb-2"></filter-dropdown>
+                <filter-dropdown v-model:value="filters.job_company_size" field="job_company_size" multiple class="mb-2"></filter-dropdown>
 
                 <label>Country</label>
-                <filter-dropdown field="job_company_location_country"  multiple class="mb-2"></filter-dropdown>
+                <filter-dropdown v-model:value="filters.job_company_location_country" field="job_company_location_country"  multiple class="mb-2"></filter-dropdown>
 
                 <div class="mt-3">
                     <input id="only_with_email" type="checkbox" v-model="filters.only_with_email"  class="form-checkbox">
-                    <span class="ml-2 cursor-pointer">Only export with email</span>
+                    <span @click="filters.only_with_email = !filters.only_with_email" class="ml-2 cursor-pointer">Only export with email</span>
                 </div>
 
                 <div class="py-3 text-right">
@@ -58,6 +58,9 @@
             return {
                 filters: {
                     industry: null,
+                    job_title: null,
+                    job_company_size: null,
+                    job_company_location_country: null,
                     only_with_email: false
                 }
             }
