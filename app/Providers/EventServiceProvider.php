@@ -22,9 +22,6 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class
         ],
-        WebhookReceived::class => [
-            StripeEventListener::class,
-        ],
     ];
 
     /**
@@ -34,8 +31,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Event::listen(function (Registered $event) {
+        /*Event::listen(function (Registered $event) {
             User::find(1)->notify(new GenericSlackNotification($event->user->email. ' registered'));
-        });
+        });*/
     }
 }
