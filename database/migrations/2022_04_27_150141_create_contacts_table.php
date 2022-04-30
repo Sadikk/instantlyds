@@ -36,7 +36,7 @@ class CreateContactsTable extends Migration
             $table->string('job_company_location_region')->nullable();
             $table->string('job_company_location_street_address')->nullable();
             $table->string('job_company_location_continent')->nullable();
-            $table->string('job_summary')->nullable();
+            $table->text('job_summary')->nullable();
             $table->integer('linkedin_connections')->nullable();
             $table->string('inferred_salary')->nullable();
             $table->smallInteger('inferred_years_experience')->nullable();
