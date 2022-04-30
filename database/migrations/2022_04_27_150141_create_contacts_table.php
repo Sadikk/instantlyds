@@ -40,7 +40,7 @@ class CreateContactsTable extends Migration
             $table->integer('linkedin_connections')->nullable();
             $table->string('inferred_salary')->nullable();
             $table->smallInteger('inferred_years_experience')->nullable();
-            $table->string('summary')->nullable();
+            $table->text('summary')->nullable();
             $table->string('phone_numbers')->nullable();
             $table->string('email')->nullable();
             $table->string('email_type')->nullable();
