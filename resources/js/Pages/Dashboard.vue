@@ -67,8 +67,24 @@
         },
         computed: {
             exportUrl() {
-                let params = new URLSearchParams(this.filters);
+                let params = this.buildParams(this.filters);
                 return '/export?' + params;
+            }
+        },
+        methods: {
+            buildParams(data) {
+                const params = new URLSearchParams()
+
+                Object.entries(data).forEach(([key, value]) => {
+                    console.log(value);
+                    if (Array.isArray(value)) {
+                        value.forEach(value => params.append(key + '[]', value.toString()))
+                    } else if (value != null) {
+                        params.append(key, value.toString())
+                    }
+                });
+
+                return params.toString()
             }
         }
     })

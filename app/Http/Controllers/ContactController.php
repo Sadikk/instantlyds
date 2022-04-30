@@ -69,7 +69,6 @@ class ContactController extends Controller
             'phone_numbers',
             'email'
         ];
-
         // create csv
         return response()->streamDownload(function() use($columns, $request) {
             $file = fopen('php://output', 'w+');
