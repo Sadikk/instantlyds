@@ -54,8 +54,8 @@ class ImportFileCommand extends Command
                     $normalizedEmailType = $parsedCollec[0]['type'];
                 }
                 else {
-                    $normalizedEmail = $normalizedEmail['address'];
                     $normalizedEmailType = $normalizedEmail['type'];
+                    $normalizedEmail = $normalizedEmail['address'];
                 }
             }
             DB::table('contacts')->insert([
