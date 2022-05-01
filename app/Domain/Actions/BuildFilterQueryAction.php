@@ -26,11 +26,19 @@ class BuildFilterQueryAction
         if (is_null($data) || $data === 'null') {
             return $query;
         }
-        if (is_array($data)) {
-            return $query->whereIn($field, $data);
+        if (!is_array($data)) {
+            $data = [$data];
+        }
+        if ($field === 'job_title') {
+            $query = $query->where(function($q) use ($field, $data){
+                foreach ($data as $title) {
+                    $q->orWhere($field, 'LIKE', '%'.strtolower($title).'%');
+                }
+            });
+            return $query;
         }
         else {
-            return $query->whereIn($field, [$data]);
+            return $query->whereIn($field, $data);
         }
     }
 }

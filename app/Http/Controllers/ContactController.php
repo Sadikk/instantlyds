@@ -6,6 +6,7 @@ use App\Domain\Actions\BuildFilterQueryAction;
 use App\Helpers\LogHelpers;
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -17,14 +18,47 @@ class ContactController extends Controller
             //TODO whitelist field
             'field' => 'required|string'
         ]);
-        $result = DB::table('contacts')
-            ->select($request->input('field'))
-            ->groupBy($request->input('field'))
-            ->orderBy($request->input('field'))
-            ->get()
-            ->pluck($request->input('field'))
-            ->all();
-        return $this->makeResponse($request, ['options' => array_values(array_filter($result)) ]);
+        if ($request->input('field') === 'job_title') {
+            return $this->makeResponse($request, ['options' => [
+                'Ceo',
+                'Partner',
+                'Owner',
+                'Founder',
+                'Manager',
+                'Co-founder',
+                'CTO',
+                'CFO',
+                'Chief financial officer',
+                'CXO',
+                'VP',
+                'Vice President',
+                'Account Manager',
+                'Senior Account Manager',
+                'Sales',
+                'Sales Manager',
+                'Sales Director',
+                'Business Development',
+                'Business Manager',
+                'Chief Executive Officer',
+                'Chief Sales Officer',
+                'Marketing Manager',
+                'Marketing Director',
+                'President'
+            ]]);
+        }
+        $field = $request->input('field');
+        $result = Cache::remember($request->input('field'), new \DateInterval('P2D'), function() use($field) {
+            return array_values(array_filter(
+                DB::table('contacts')
+                    ->select($field)
+                    ->groupBy($field)
+                    ->orderBy($field)
+                    ->get()
+                    ->pluck($field)
+                    ->all()
+            ));
+        });
+        return $this->makeResponse($request, ['options' => $result ]);
     }
 
     public function export(Request $request) {
@@ -67,7 +101,8 @@ class ContactController extends Controller
             'inferred_years_experience',
             'summary',
             'phone_numbers',
-            'email'
+            'email',
+            'email_type',
         ];
         // create csv
         return response()->streamDownload(function() use($columns, $request) {
