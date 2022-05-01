@@ -96,7 +96,7 @@ class ImportFileCommand extends Command
                     'job_summary' => $record['job_summary'],
                     'linkedin_connections' => intval($record['linkedin_connections']),
                     'inferred_salary' => substr($record['inferred_salary'], 0, 250),
-                    'inferred_years_experience' => substr($record['inferred_years_experience'],0, 250),
+                    'inferred_years_experience' => intval(substr($record['inferred_years_experience'],0, 250)),
                     'summary' => $record['summary'],
                     'phone_numbers' => substr($record['phone_numbers'],0, 250),
 
@@ -104,7 +104,7 @@ class ImportFileCommand extends Command
                     'email_type' => $normalizedEmailType,
 
                     'industry' =>  substr($record['industry'],0,250),
-                    'job_title' => substr($record['job_title'], 0, 250),
+                    'job_title' => preg_replace("/[^A-Za-z0-9 ]/", '', substr($record['job_title'], 0, 250)),
                     'job_company_size' => $record['job_company_size'],
                     'job_company_location_country' => $record['job_company_location_country'],
                 ]);
