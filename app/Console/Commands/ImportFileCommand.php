@@ -40,6 +40,7 @@ class ImportFileCommand extends Command
     public function handle()
     {
         try {
+            DB::disableQueryLog();
             DB::beginTransaction();
             $csv = Reader::createFromPath($this->argument('file'), 'r');
             $csv->setHeaderOffset(0); //we don't want to insert the header
@@ -52,8 +53,14 @@ class ImportFileCommand extends Command
                         $parsedCollec = collect($parsed);
                         $normalizedEmail = $parsedCollec->where('type', '=', 'current_professional')->first();
                         if (!$normalizedEmail)  {
-                            $normalizedEmail = $parsedCollec[0]['address'];
-                            $normalizedEmailType = $parsedCollec[0]['type'];
+                            if (is_array($parsedCollec[0])) {
+                                $normalizedEmail = $parsedCollec[0]['address'];
+                                $normalizedEmailType = $parsedCollec[0]['type'];
+                            }
+                            else {
+                                $normalizedEmail = $parsedCollec[0];
+                                $normalizedEmailType = 'unknown';
+                            }
                         }
                         else {
                             $normalizedEmailType = $normalizedEmail['type'];
@@ -69,9 +76,9 @@ class ImportFileCommand extends Command
                     'first_name' => ucfirst($record['first_name']), // capitalize
                     'last_name' => ucfirst($record['last_name']), // capitalize
                     'gender' => $record['gender'],
-                    'linkedin_url' => $record['linkedin_url'],
-                    'facebook_url' => $record['facebook_url'],
-                    'twitter_url' => $record['twitter_url'],
+                    'linkedin_url' => substr($record['linkedin_url'], 0, 250),
+                    'facebook_url' => substr($record['facebook_url'],0 ,250),
+                    'twitter_url' => substr($record['twitter_url'], 0,250),
                     'work_email' => $record['work_email'],
                     'mobile_phone' => $record['mobile_phone'],
                     'job_title_levels' => $record['job_title_levels'],
@@ -89,12 +96,12 @@ class ImportFileCommand extends Command
                     'job_summary' => $record['job_summary'],
                     'linkedin_connections' => intval($record['linkedin_connections']),
                     'inferred_salary' => substr($record['inferred_salary'], 0, 250),
-                    'inferred_years_experience' => $record['inferred_years_experience'],
+                    'inferred_years_experience' => substr($record['inferred_years_experience'],0, 250),
                     'summary' => $record['summary'],
                     'phone_numbers' => substr($record['phone_numbers'],0, 250),
 
                     'email' => $normalizedEmail,
-                    'email_type' => $normalizedEmail,
+                    'email_type' => $normalizedEmailType,
 
                     'industry' =>  substr($record['industry'],0,250),
                     'job_title' => substr($record['job_title'], 0, 250),
