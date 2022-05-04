@@ -1,7 +1,7 @@
 <template>
     <Link :href="'/'">
         <span class="text-gray-900 text-3xl text-center py-3">
-            Instantlyds
+            Leadbase
         </span>
     </Link>
 </template>
