@@ -46,6 +46,19 @@ class ContactController extends Controller
                 'President'
             ]]);
         }
+        else if ($request->input('field') === 'job_title_levels') {
+            return $this->makeResponse($request, ['options' => [
+                'cxo',
+                'director',
+                'entry',
+                'manager',
+                'owner',
+                'partner',
+                'training',
+                'unpaid',
+                'vp'
+            ]]);
+        }
         $field = $request->input('field');
         $result = Cache::remember($request->input('field'), new \DateInterval('P2D'), function() use($field) {
             return array_values(array_filter(
@@ -65,6 +78,7 @@ class ContactController extends Controller
         $request->validate([
             'only_with_email' => 'in:true,false',
             'job_title' => 'nullable',
+            'job_title_levels' => 'nullable',
             'job_company_size' => 'nullable',
             'job_company_location_country' => 'nullable',
             'industry' => 'nullable'

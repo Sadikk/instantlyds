@@ -14,6 +14,9 @@
                 <label>Job title</label>
                 <filter-dropdown v-model:value="filters.job_title" field="job_title" multiple class="mb-2"></filter-dropdown>
 
+                <label>Job title level</label>
+                <filter-dropdown v-model:value="filters.job_title_levels" field="job_title_levels"  multiple class="mb-2"></filter-dropdown>
+
                 <label>Employees</label>
                 <filter-dropdown v-model:value="filters.job_company_size" field="job_company_size" multiple class="mb-2"></filter-dropdown>
 
@@ -59,6 +62,7 @@
                 filters: {
                     industry: null,
                     job_title: null,
+                    job_title_levels: null,
                     job_company_size: null,
                     job_company_location_country: null,
                     only_with_email: false

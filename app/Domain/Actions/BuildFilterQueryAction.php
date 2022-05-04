@@ -18,6 +18,7 @@ class BuildFilterQueryAction
         $query = $this->applyInFilter($query, 'job_title', $params->get('job_title', null));
         $query = $this->applyInFilter($query, 'job_company_size', $params->get('job_company_size', null));
         $query = $this->applyInFilter($query, 'job_company_location_country', $params->get('job_company_location_country', null));
+        $query = $this->applyInFilter($query, 'job_title_levels', $params->get('job_title_levels', null));
         $query = $this->applyInFilter($query, 'industry', $params->get('industry', null));
         return $query;
     }
@@ -33,6 +34,14 @@ class BuildFilterQueryAction
             $query = $query->where(function($q) use ($field, $data){
                 foreach ($data as $title) {
                     $q->orWhere($field, 'LIKE', '%'.strtolower($title).'%');
+                }
+            });
+            return $query;
+        }
+        else if ($field === 'job_title_levels') {
+            $query = $query->where(function($q) use ($field, $data){
+                foreach ($data as $title) {
+                    $q->orWhere($field, 'LIKE', "%'".strtolower($title)."'%");
                 }
             });
             return $query;
