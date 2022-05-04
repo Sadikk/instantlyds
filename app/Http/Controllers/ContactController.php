@@ -81,6 +81,7 @@ class ContactController extends Controller
             'job_title_levels' => 'nullable',
             'job_company_size' => 'nullable',
             'job_company_location_country' => 'nullable',
+            'job_company_location_locality' => 'nullable',
             'industry' => 'nullable'
         ]);
         // set header

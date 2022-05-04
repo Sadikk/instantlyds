@@ -23,6 +23,9 @@
                 <label>Country</label>
                 <filter-dropdown v-model:value="filters.job_company_location_country" field="job_company_location_country"  multiple class="mb-2"></filter-dropdown>
 
+                <label>Locality</label>
+                <filter-dropdown v-if="filters.job_company_location_country != null" v-model:value="filters.job_company_location_locality" field="job_company_location_locality"  multiple class="mb-2"></filter-dropdown>
+
                 <div class="mt-3">
                     <input id="only_with_email" type="checkbox" v-model="filters.only_with_email"  class="form-checkbox">
                     <span @click="filters.only_with_email = !filters.only_with_email" class="ml-2 cursor-pointer">Only export with email</span>
@@ -65,6 +68,7 @@
                     job_title_levels: null,
                     job_company_size: null,
                     job_company_location_country: null,
+                    job_company_location_locality: null,
                     only_with_email: false
                 }
             }
