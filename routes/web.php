@@ -22,5 +22,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified'] ], function() {
 
     Route::get('/dropdown', [\App\Http\Controllers\ContactController::class, 'getDropdown']);
     Route::get('/export', [\App\Http\Controllers\ContactController::class, 'export']);
+    Route::get('/count', [\App\Http\Controllers\ContactController::class, 'count']);
 });
 Route::impersonate();

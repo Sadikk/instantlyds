@@ -137,4 +137,22 @@ class ContactController extends Controller
             fclose($file);
         }, ExportHelpers::generateFilename($request->all()));
     }
+
+    public function count(Request $request) {
+        $request->validate([
+            'only_with_email' => 'in:true,false',
+            'job_title' => 'nullable',
+            'job_title_levels' => 'nullable',
+            'job_company_size' => 'nullable',
+            'job_company_location_country' => 'nullable',
+            'job_company_location_locality' => 'nullable',
+            'industry' => 'nullable'
+        ]);
+        $query = Contact::query();
+        $query = (new BuildFilterQueryAction)($query, collect($request->all()));
+        $count = $query->count();
+        return $this->makeResponse($request, [
+            'count' => $count
+        ]);
+    }
 }

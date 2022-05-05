@@ -32,6 +32,12 @@
                 </div>
 
                 <div class="py-3 text-right">
+                    <div v-if="countLoading" class="spinner mr-4 w-5 h-5" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <span class="mr-4">
+                        {{ previewCount }} leads
+                    </span>
                     <button :disabled="!enabled" class="inline-flex justify-center py-2 px-4 border border-transparent
             shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700
             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -51,6 +57,7 @@
     import Welcome from '@/Jetstream/Welcome.vue'
     import {Link} from "@inertiajs/inertia-vue3";
     import FilterDropdown from "../Components/FilterDropdown";
+    import {debounce} from "lodash";
 
     export default defineComponent({
         components: {
@@ -72,7 +79,9 @@
                     job_company_location_country: [],
                     job_company_location_locality: [],
                     only_with_email: false
-                }
+                },
+                previewCount: 0,
+                countLoading : false
             }
         },
         computed: {
@@ -88,7 +97,11 @@
                     (this.filters.job_company_location_country.length > 0);
             }
         },
+        mounted() {
+            this.getPreviewCount();
+        },
         methods: {
+            debounce,
             buildParams(data) {
                 const params = new URLSearchParams()
 
@@ -101,6 +114,23 @@
                 });
 
                 return params.toString()
+            },
+            getPreviewCount() {
+                this.countLoading = true;
+                axios.get('/count?' + this.buildParams(this.filters)).then(
+                    ans => {
+                        this.previewCount = ans.data.count;
+                        this.countLoading = false;
+                    }
+                )
+            }
+        },
+        watch: {
+            filters: {
+                handler() {
+                    this.getPreviewCount();
+                },
+                deep: true
             }
         }
     })
