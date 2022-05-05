@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\Actions\BuildFilterQueryAction;
+use App\Helpers\ExportHelpers;
 use App\Helpers\LogHelpers;
 use App\Models\Contact;
 use Illuminate\Http\Request;
@@ -125,7 +126,7 @@ class ContactController extends Controller
             fputcsv($file, $columns);
 
             $data = Contact::select($columns);
-            $data = (new BuildFilterQueryAction)($data, collect(array_map('strtolower', $request->all())));
+            $data = (new BuildFilterQueryAction)($data, collect($request->all()));
             Log::info(LogHelpers::getEloquentSqlWithBindings($data));
             $data = $data->cursor()
                 ->each(function ($data) use ($file) {
@@ -134,6 +135,6 @@ class ContactController extends Controller
                 });
 
             fclose($file);
-        }, 'export-'.date('d-m-Y').'.csv');
+        }, ExportHelpers::generateFilename($request->all()));
     }
 }

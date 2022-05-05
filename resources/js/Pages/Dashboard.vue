@@ -32,11 +32,13 @@
                 </div>
 
                 <div class="py-3 text-right">
-                    <a :href="exportUrl" target="_blank" class="inline-flex justify-center py-2 px-4 border border-transparent
+                    <button :disabled="!enabled" class="inline-flex justify-center py-2 px-4 border border-transparent
             shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700
             focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
-                        Export CSV
-                    </a>
+                        <a :href="exportUrl" target="_blank">
+                            Export CSV
+                        </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -63,20 +65,27 @@
         data() {
             return {
                 filters: {
-                    industry: null,
-                    job_title: null,
-                    job_title_levels: null,
-                    job_company_size: null,
-                    job_company_location_country: null,
-                    job_company_location_locality: null,
+                    industry: [],
+                    job_title: [],
+                    job_title_levels: [],
+                    job_company_size: [],
+                    job_company_location_country: [],
+                    job_company_location_locality: [],
                     only_with_email: false
                 }
             }
         },
         computed: {
             exportUrl() {
+                if (!this.enabled) {
+                    return '#';
+                }
                 let params = this.buildParams(this.filters);
                 return '/export?' + params;
+            },
+            enabled() {
+                return (this.filters.industry.length > 0) || (this.filters.job_title_levels.length > 0) ||
+                    (this.filters.job_company_location_country.length > 0);
             }
         },
         methods: {
@@ -84,7 +93,6 @@
                 const params = new URLSearchParams()
 
                 Object.entries(data).forEach(([key, value]) => {
-                    console.log(value);
                     if (Array.isArray(value)) {
                         value.forEach(value => params.append(key + '[]', value.toString()))
                     } else if (value != null) {

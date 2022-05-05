@@ -47,7 +47,7 @@ class BuildFilterQueryAction
             return $query;
         }
         else {
-            return $query->whereIn($field, $data);
+            return $query->whereIn($field, array_map('strtolower', $data));
         }
     }
 }
