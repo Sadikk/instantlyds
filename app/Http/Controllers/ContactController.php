@@ -48,20 +48,20 @@ class ContactController extends Controller
         }
         else if ($request->input('field') === 'job_title_levels') {
             return $this->makeResponse($request, ['options' => [
-                'cxo',
-                'director',
-                'entry',
-                'manager',
-                'owner',
-                'partner',
-                'training',
-                'unpaid',
-                'vp'
+                'CXO',
+                'Director',
+                'Entry',
+                'Manager',
+                'Owner',
+                'Partner',
+                'Training',
+                'Unpaid',
+                'VP'
             ]]);
         }
         $field = $request->input('field');
         $result = Cache::remember($request->input('field'), new \DateInterval('P2D'), function() use($field) {
-            return array_values(array_filter(
+            return array_map('ucwords', array_values(array_filter(
                 DB::table('contacts')
                     ->select($field)
                     ->groupBy($field)
@@ -69,7 +69,7 @@ class ContactController extends Controller
                     ->get()
                     ->pluck($field)
                     ->all()
-            ));
+            )));
         });
         return $this->makeResponse($request, ['options' => $result ]);
     }
@@ -125,7 +125,7 @@ class ContactController extends Controller
             fputcsv($file, $columns);
 
             $data = Contact::select($columns);
-            $data = (new BuildFilterQueryAction)($data, collect($request->all()));
+            $data = (new BuildFilterQueryAction)($data, collect(array_map('strtolower', $request->all())));
             Log::info(LogHelpers::getEloquentSqlWithBindings($data));
             $data = $data->cursor()
                 ->each(function ($data) use ($file) {
