@@ -61,7 +61,7 @@ class ContactController extends Controller
             ]]);
         }
         $field = $request->input('field');
-        $result = Cache::remember($request->input('field'), new \DateInterval('P2D'), function() use($field) {
+        $result = Cache::remember($request->input('field').'-cache', new \DateInterval('P2D'), function() use($field) {
             return array_map('ucwords', array_values(array_filter(
                 DB::table('contacts')
                     ->select($field)
@@ -150,7 +150,10 @@ class ContactController extends Controller
         ]);
         $query = Contact::query();
         $query = (new BuildFilterQueryAction)($query, collect($request->all()));
-        $count = $query->count();
+        $hash = md5($query->toSql());
+        $count = Cache::remember($hash, new \DateInterval('P7D'), function() use($query) {
+            return $query->count();
+        });
         return $this->makeResponse($request, [
             'count' => $count
         ]);

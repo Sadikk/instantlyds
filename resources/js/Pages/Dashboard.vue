@@ -81,7 +81,8 @@
                     only_with_email: false
                 },
                 previewCount: 0,
-                countLoading : false
+                countLoading : false,
+                previewId: ''
             }
         },
         computed: {
@@ -117,12 +118,19 @@
             },
             getPreviewCount() {
                 this.countLoading = true;
+                this.previewId = this.getRandom();
+                let r = this.previewId;
                 axios.get('/count?' + this.buildParams(this.filters)).then(
                     ans => {
-                        this.previewCount = ans.data.count;
-                        this.countLoading = false;
+                        if (r === this.previewId) {
+                            this.previewCount = ans.data.count;
+                            this.countLoading = false;
+                        }
                     }
                 )
+            },
+            getRandom() {
+                return (Math.random() + 1).toString(36).substring(7);
             }
         },
         watch: {
