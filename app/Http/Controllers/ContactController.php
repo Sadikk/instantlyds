@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\Actions\BuildFilterQueryAction;
+use App\Domain\Actions\CountQueryAction;
 use App\Helpers\ExportHelpers;
 use App\Helpers\LogHelpers;
 use App\Models\Contact;
@@ -121,7 +122,11 @@ class ContactController extends Controller
             'email_type',
         ];
         // create csv
-        return response()->streamDownload(function() use($columns, $request) {
+        $count = (new CountQueryAction)($request->all());
+        if ($count > $request->user()->credits) {
+            abort(403, 'Not enough credits');
+        }
+        return response()->streamDownload(function() use($columns, $request, $count) {
             $file = fopen('php://output', 'w+');
             fputcsv($file, $columns);
 
@@ -135,6 +140,9 @@ class ContactController extends Controller
                 });
 
             fclose($file);
+            $count = (new CountQueryAction)($request->all());
+            $request->user()->credits = $request->user()->credits - $count;
+            $request->user()->save();
         }, ExportHelpers::generateFilename($request->all()));
     }
 
@@ -148,12 +156,7 @@ class ContactController extends Controller
             'job_company_location_locality' => 'nullable',
             'industry' => 'nullable'
         ]);
-        $query = Contact::query();
-        $query = (new BuildFilterQueryAction)($query, collect($request->all()));
-        $hash = md5($query->toSql());
-        $count = Cache::remember($hash, new \DateInterval('P7D'), function() use($query) {
-            return $query->count();
-        });
+        $count = (new CountQueryAction)($request->all());
         return $this->makeResponse($request, [
             'count' => $count
         ]);

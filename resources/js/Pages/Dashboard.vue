@@ -3,6 +3,9 @@
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Dashboard
+                <span class="text-right float-right text-lg">
+                    <remaining-credits></remaining-credits>
+                </span>
             </h2>
         </template>
 
@@ -36,7 +39,7 @@
                         <span class="sr-only">Loading...</span>
                     </div>
                     <span class="mr-4">
-                        {{ previewCount }} leads
+                        {{ previewCount }} leads will be exported
                     </span>
                     <button :disabled="!enabled" class="inline-flex justify-center py-2 px-4 border border-transparent
             shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700
@@ -58,13 +61,15 @@
     import {Link} from "@inertiajs/inertia-vue3";
     import FilterDropdown from "../Components/FilterDropdown";
     import {debounce} from "lodash";
+    import RemainingCredits from "../Components/RemainingCredits";
 
     export default defineComponent({
         components: {
             FilterDropdown,
             AppLayout,
             Welcome,
-            Link
+            Link,
+            RemainingCredits
         },
         props: {
 
@@ -123,7 +128,10 @@
                 axios.get('/count?' + this.buildParams(this.filters)).then(
                     ans => {
                         if (r === this.previewId) {
-                            this.previewCount = ans.data.count;
+                            this.previewCount = (ans.data.count).toLocaleString(
+                                undefined, // leave undefined to use the visitor's browser
+                                { minimumFractionDigits: 0 }
+                            );
                             this.countLoading = false;
                         }
                     }
