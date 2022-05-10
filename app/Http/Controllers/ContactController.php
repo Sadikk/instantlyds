@@ -18,7 +18,8 @@ class ContactController extends Controller
     public function getDropdown(Request $request) {
         $request->validate([
             //TODO whitelist field
-            'field' => 'required|string'
+            'field' => 'required|string',
+            'countries' => 'nullable|array'
         ]);
         if ($request->input('field') === 'job_title') {
             return $this->makeResponse($request, ['options' => [
@@ -62,13 +63,20 @@ class ContactController extends Controller
             ]]);
         }
         $field = $request->input('field');
-        $result = Cache::remember($request->input('field').'-cache', new \DateInterval('P2D'), function() use($field) {
+        $countries = $request->input('countries', null);
+        if (!is_array($countries)) {
+            $countries = [$countries];
+        }
+        $result = Cache::remember($request->input('field').join('-',$request->input('countries', [])).'-cache', new \DateInterval('P2D'), function() use($field, $countries) {
+            $q = DB::table('contacts')
+                ->select($field)
+                ->groupBy($field)
+                ->orderBy($field);
+            if ($countries) {
+                $q = $q->whereIn('job_company_location_country',  array_map('strtolower', $countries));
+            }
             return array_map('ucwords', array_values(array_filter(
-                DB::table('contacts')
-                    ->select($field)
-                    ->groupBy($field)
-                    ->orderBy($field)
-                    ->get()
+                    $q->get()
                     ->pluck($field)
                     ->all()
             )));

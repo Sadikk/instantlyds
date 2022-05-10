@@ -18,11 +18,24 @@ export default defineComponent({
     },
     methods: {
         load() {
-            axios.get('/dropdown?field=' + this.field).then(
+            axios.get('/dropdown?' + this.buildParams({ field: this.field, countries: this.param })).then(
                 ans => {
                     this.options = ans.data.options;
                 }
             )
+        },
+        buildParams(data) {
+            const params = new URLSearchParams()
+
+            Object.entries(data).forEach(([key, value]) => {
+                if (Array.isArray(value)) {
+                    value.forEach(value => params.append(key + '[]', value.toString()))
+                } else if (value != null) {
+                    params.append(key, value.toString())
+                }
+            });
+
+            return params.toString()
         }
     },
     mounted() {
@@ -30,7 +43,8 @@ export default defineComponent({
     },
     props: {
         field: String,
-        multiple:Boolean
+        multiple:Boolean,
+        param: Array
     },
     data() {
         return {
@@ -38,12 +52,12 @@ export default defineComponent({
             options: []
         }
     },
-    computed:{
-
-    },
     watch: {
         value() {
             this.$emit('update:value', this.value);
+        },
+        param() {
+            this.load();
         }
     }
 })
