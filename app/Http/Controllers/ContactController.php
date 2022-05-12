@@ -67,7 +67,7 @@ class ContactController extends Controller
         if (!is_array($countries)) {
             $countries = [$countries];
         }
-        $result = Cache::remember($request->input('field').join('-',$request->input('countries', [])).'-cache', new \DateInterval('P2D'), function() use($field, $countries) {
+        $result = Cache::remember($request->input('field').join('-',$request->input('countries', [])).'--cache', new \DateInterval('P2D'), function() use($field, $countries) {
             $q = DB::table('contacts')
                 ->select($field)
                 ->groupBy($field)
@@ -146,6 +146,7 @@ class ContactController extends Controller
             $data = $data->cursor()
                 ->each(function ($data) use ($file) {
                     $data = $data->toArray();
+                    $data['job_title_levels'] = preg_replace("/[^A-Za-z0-9 ,]/", '', $data['job_title_levels']);
                     fputcsv($file, $data);
                 });
 
