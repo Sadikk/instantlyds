@@ -19,4 +19,11 @@ class UserController extends Controller
             ]
         );
     }
+
+    public function showSubscription(Request $request) {
+        return Inertia::render('Subscription', [
+            'subscribed' => $request->user()->subscribed(),
+            'subscription' => $request->user()->subscription()
+        ]);
+    }
 }

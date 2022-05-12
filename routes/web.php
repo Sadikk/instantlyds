@@ -25,5 +25,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified'] ], function() {
     Route::get('/count', [\App\Http\Controllers\ContactController::class, 'count']);
 
     Route::get('/credits', [\App\Http\Controllers\UserController::class, 'getRemainingCredits'])->name('credits');
+
+    Route::get('/subscription', [\App\Http\Controllers\UserController::class, 'showSubscription'])->name('subscription');
+    Route::get('/subscription-checkout', [\App\Http\Controllers\BillingController::class, 'subscriptionCheckout'])->name('sub-checkout');
+    Route::get('/billing-portal', [\App\Http\Controllers\BillingController::class, 'billingPortal'])->name('billing-portal');
 });
 Route::impersonate();
