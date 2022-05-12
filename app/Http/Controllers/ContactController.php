@@ -102,7 +102,7 @@ class ContactController extends Controller
             'linkedin_url',
             'facebook_url',
             'twitter_url',
-            'work_email',
+            //'work_email',
             'mobile_phone',
             'industry',
             'job_title',
@@ -136,7 +136,9 @@ class ContactController extends Controller
         }
         return response()->streamDownload(function() use($columns, $request, $count) {
             $file = fopen('php://output', 'w+');
-            fputcsv($file, $columns);
+            fputcsv($file, array_map(function($item) {
+                return ucwords(str_replace('_', ' ', $item));
+            }, $columns));
 
             $data = Contact::select($columns);
             $data = (new BuildFilterQueryAction)($data, collect($request->all()));
