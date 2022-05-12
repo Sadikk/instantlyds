@@ -63,7 +63,7 @@ class ContactController extends Controller
             ]]);
         }
         $field = $request->input('field');
-        $countries = $request->input('countries', null);
+        $countries = $request->input('countries', []);
         if (!is_array($countries)) {
             $countries = [$countries];
         }
@@ -72,7 +72,7 @@ class ContactController extends Controller
                 ->select($field)
                 ->groupBy($field)
                 ->orderBy($field);
-            if ($countries) {
+            if ($countries && count($countries) > 0) {
                 $q = $q->whereIn('job_company_location_country',  array_map('strtolower', $countries));
             }
             return array_map('ucwords', array_values(array_filter(
