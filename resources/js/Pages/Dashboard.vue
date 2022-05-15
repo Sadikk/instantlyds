@@ -12,7 +12,7 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <label>Industry</label>
-               <filter-dropdown v-model:value="filters.industry" field="industry" multiple class="mb-2"></filter-dropdown>
+               <filter-dropdown v-model:value="filters.job_company_industry" field="industry" multiple class="mb-2"></filter-dropdown>
 
                 <label>Job title</label>
                 <filter-dropdown v-model:value="filters.job_title" field="job_title" multiple class="mb-2"></filter-dropdown>
@@ -77,7 +77,7 @@
         data() {
             return {
                 filters: {
-                    industry: [],
+                    job_company_industry: [],
                     job_title: [],
                     job_title_levels: [],
                     job_company_size: [],
@@ -99,7 +99,7 @@
                 return '/export?' + params;
             },
             enabled() {
-                return (this.filters.industry.length > 0) || (this.filters.job_title_levels.length > 0) ||
+                return (this.filters.job_company_industry.length > 0) || (this.filters.job_title_levels.length > 0) ||
                     (this.filters.job_company_location_country.length > 0);
             }
         },

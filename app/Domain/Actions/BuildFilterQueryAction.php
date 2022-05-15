@@ -19,7 +19,7 @@ class BuildFilterQueryAction
         $query = $this->applyInFilter($query, 'job_company_size', $params->get('job_company_size', null));
         $query = $this->applyInFilter($query, 'job_company_location_country', $params->get('job_company_location_country', null));
         $query = $this->applyInFilter($query, 'job_title_levels', $params->get('job_title_levels', null));
-        $query = $this->applyInFilter($query, 'industry', $params->get('industry', null));
+        $query = $this->applyInFilter($query, 'job_company_industry', $params->get('industry', null));
         return $query;
     }
 

@@ -92,7 +92,7 @@ class ContactController extends Controller
             'job_company_size' => 'nullable',
             'job_company_location_country' => 'nullable',
             'job_company_location_locality' => 'nullable',
-            'industry' => 'nullable'
+            'job_company_industry' => 'nullable'
         ]);
         // set header
         $columns = [
@@ -165,7 +165,7 @@ class ContactController extends Controller
             'job_company_size' => 'nullable',
             'job_company_location_country' => 'nullable',
             'job_company_location_locality' => 'nullable',
-            'industry' => 'nullable'
+            'job_company_industry' => 'nullable'
         ]);
         $count = (new CountQueryAction)($request->all());
         return $this->makeResponse($request, [
