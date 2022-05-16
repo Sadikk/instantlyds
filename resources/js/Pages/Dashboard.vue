@@ -26,7 +26,7 @@
                 <label>Country</label>
                 <filter-dropdown v-model:value="filters.job_company_location_country" field="job_company_location_country"  multiple class="mb-2"></filter-dropdown>
 
-                <label>Locality</label>
+                <label v-if="filters.job_company_location_country.length > 0">Locality</label>
                 <filter-dropdown :param="filters.job_company_location_country" v-if="filters.job_company_location_country.length > 0" v-model:value="filters.job_company_location_locality" field="job_company_location_locality"  multiple class="mb-2"></filter-dropdown>
 
                 <div class="mt-3">
